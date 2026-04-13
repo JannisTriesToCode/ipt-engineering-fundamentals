@@ -77,32 +77,38 @@ sudo docker run -p 3000:3000 <My-Azure-ACR>.azurecr.io/ipt-spins:latest
 ```
 
 ## PART C - Continuous Deployment (Requires Part B)
+In this section you are going to create a GitHub Action which runs after the publishing to Azure was successful. 
+For this you will need the following:
+1. A service plan in azure 
 
-Now we want to add a action to continuously release the newest version of the Application. Therefore, we create a new
-GitHub action. 
-First we need to deploy the application on azure. For this we define a new plan which uses the free azure plan F1
+   Create a new plan which uses the free azure plan F1
 ```bash
 az appservice plan create --name <your-plan-name> --resource-group <your-resource-groupe-name> --sku F1 --is-linux
 ```
+2. Create a Web App in azure, where this application is deployed
 
-Then we create a webapp using this plan. Make sure to specify your resource-group and set a name
+Make sure to specify your resource-group and set a name
 ```bash
 az webapp create \
      --resource-group <your-resource-groupe-name>  \
      --plan <your-plan-name> \
      --name <your-webapp-name> \
-     --deployment-container-image-name lrengineering.azurecr.io/ipt-spins:latest
+     --deployment-container-image-name <your-container-registry>/ipt-spins:latest
 ```
-Now we create new credentials which GitHub Action will use to deploy the application
+
+3. A Service Principal in Azure which has the contributor role on your resource
+
 ```bash
 az ad sp create-for-rbac --name "<your-service-principal-name>" --role contributor \
     --scopes /subscriptions/<subscription-id>/resourceGroups/<resource-group> \
     --sdk-auth
 ```
-
 Store the returned json as secret in the ``<your-repository> ->Settings->Secrets And Variables->Actions secrets and variables``
 as new Secret with the name ``AZURE_RESOURCEGROUP_CONTRIBUTOR_SERVICEPRINICIPAL``. Create another Action secret or variable
-for the application name with under ``AZURE_WEBAPP_NAME`` containing ``<your-webapp-name> `` .
+for the application name with under ``AZURE_WEBAPP_NAME`` containing ``<your-webapp-name> ``.
+
+4. Create a new workflow for GitHub where you deploy the latest version of your application which you published before to the registry.
+5. Test your setup by making a change on the codebase (for example make the logo spin faster) and verify that the change is visible on your deployed webapp.
 
 ## PART D - Code Quality
 
