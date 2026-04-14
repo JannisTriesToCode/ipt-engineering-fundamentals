@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: jralrengineeringpd2.azurecr.io/ipt-engineering-fundamentals:3c5f81c7c771f04656e2b0325cb3130860b76ade
+          image: jralrengineeringpd2.azurecr.io/ipt-engineering-fundamentals:b221255bec21d02326ac07f938e02cf68a9b96db
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
