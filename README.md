@@ -54,7 +54,7 @@ Fast shipping of new code can be crutial, for example in the case of security up
 2. Publish your Docker Image to the container registry by creating a new workflow in `.github/workflows`. Ensure that a new appropriate Version Tag is used when publishing the image, and that the image is only pushed upon completion of the PR.
 3. If Docker is available on your local machine, you can try to pull your image from the Container Registry and run it locally.
 
-## PART C - Continuous Deployment (Requires Part B)
+## PART C - Continuous Deployment
 In this section you are going to create a GitHub Action which runs after the publishing to Azure was successful. 
 
 Prerequisites:
