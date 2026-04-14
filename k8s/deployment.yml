@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ipt-engineering-fundamentals
+  namespace: dev
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ipt-engineering-fundamentals
+  template:
+    metadata:
+      labels:
+        app: ipt-engineering-fundamentals
+    spec:
+      containers:
+        - name: frontend
+          image: jralrengineeringpd2.azurecr.io/ipt-engineering-fundamentals:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
